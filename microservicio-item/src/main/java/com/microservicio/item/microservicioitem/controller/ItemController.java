@@ -1,11 +1,12 @@
 package com.microservicio.item.microservicioitem.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.microservicio.item.microservicioitem.models.Item;
-import com.microservicio.item.microservicioitem.models.Producto;
+import com.microservicio.common.microserviciocommon.models.entity.Producto;
 import com.microservicio.item.microservicioitem.models.services.IItemServices;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
@@ -74,7 +75,8 @@ public class ItemController {
     }
 
     public Item VerPorDefecto(Long id, Integer cantidad){
-        return new Item(new Producto(id, "Sin Descripcion", 0.0), cantidad);
+        Producto producto = new Producto(id, "Sin Descripcion", 0.0, new Date());
+        return new Item(producto, cantidad);
     }
 
     @GetMapping("/obtener-config")

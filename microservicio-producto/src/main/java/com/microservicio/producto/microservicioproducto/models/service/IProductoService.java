@@ -2,7 +2,7 @@ package com.microservicio.producto.microservicioproducto.models.service;
 
 import java.util.List;
 
-import com.microservicio.producto.microservicioproducto.models.entity.Producto;
+import com.microservicio.common.microserviciocommon.models.entity.Producto;
 
 public interface IProductoService {
 

@@ -3,7 +3,7 @@ package com.microservicio.producto.microservicioproducto.models.service;
 import java.util.List;
 
 import com.microservicio.producto.microservicioproducto.models.dao.ProductoDao;
-import com.microservicio.producto.microservicioproducto.models.entity.Producto;
+import com.microservicio.common.microserviciocommon.models.entity.Producto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

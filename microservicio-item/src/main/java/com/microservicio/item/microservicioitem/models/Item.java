@@ -1,5 +1,7 @@
 package com.microservicio.item.microservicioitem.models;
 
+import com.microservicio.common.microserviciocommon.models.entity.Producto;
+
 public class Item {
     private Producto producto;
     private Integer cantidad;

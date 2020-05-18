@@ -3,7 +3,7 @@ package com.microservicio.producto.microservicioproducto.controllers;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.microservicio.producto.microservicioproducto.models.entity.Producto;
+import com.microservicio.common.microserviciocommon.models.entity.Producto;
 import com.microservicio.producto.microservicioproducto.models.service.IProductoService;
 
 import org.springframework.beans.factory.annotation.Autowired;

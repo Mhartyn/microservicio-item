@@ -1,12 +1,29 @@
-package com.microservicio.item.microservicioitem.models;
+package com.microservicio.common.microserviciocommon.models.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Producto {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "productos")
+public class Producto implements Serializable {
+            
+	private static final long serialVersionUID = 1149948359698191453L;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
     private Double precio;
-    private Date createAt;
 
     public Producto(Long id, String nombre, Double precio, Date createAt, Integer port) {
         this.id = id;
@@ -27,17 +44,23 @@ public class Producto {
     public Producto port(Integer port) {
         this.port = port;
         return this;
-    }
+    }    
 
+    @Column(name = "create_at")
+    @Temporal(TemporalType.DATE)
+    private Date createAt;
+
+    @Transient
     private Integer port;
 
     public Producto() {
     }
 
-    public Producto(Long id, String nombre, Double precio) {
+    public Producto(Long id, String nombre, Double precio, Date createAt) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
+        this.createAt = createAt;
     }
 
     public Long getId() {
@@ -55,7 +78,7 @@ public class Producto {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
+
     public Double getPrecio() {
         return this.precio;
     }
@@ -76,7 +99,7 @@ public class Producto {
         this.id = id;
         return this;
     }
-    
+
     public Producto nombre(String nombre) {
         this.nombre = nombre;
         return this;
@@ -95,11 +118,10 @@ public class Producto {
     @Override
     public String toString() {
         return "{" +
-        " id='" + getId() + "'" +
+            " id='" + getId() + "'" +
             ", nombre='" + getNombre() + "'" +
             ", precio='" + getPrecio() + "'" +
             ", createAt='" + getCreateAt() + "'" +
             "}";
     }
 }
-    

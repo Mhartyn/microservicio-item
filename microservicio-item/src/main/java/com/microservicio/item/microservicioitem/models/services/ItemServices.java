@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.microservicio.item.microservicioitem.models.Item;
-import com.microservicio.item.microservicioitem.models.Producto;
+import com.microservicio.common.microserviciocommon.models.entity.Producto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
