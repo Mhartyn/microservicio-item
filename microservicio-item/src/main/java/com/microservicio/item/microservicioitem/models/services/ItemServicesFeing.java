@@ -22,7 +22,24 @@ public class ItemServicesFeing implements IItemServices {
 
     @Override
     public Item findById(Long id, Integer cantidad) {        
-        return new Item(clienteFeing.Ver(id), cantidad);
+        return new Item(clienteFeing.ver(id), cantidad);
+    }
+
+    @Override
+    public Item save(Item item) {
+        item.setProducto(clienteFeing.crear(item.getProducto()));
+        return item;
+    }
+
+    @Override
+    public Item update(Item item, Long id) {
+        item.setProducto(clienteFeing.update(item.getProducto(), id));
+        return item;
+    }
+
+    @Override
+    public void delete(Long id) {
+        clienteFeing.eliminar(id);
     }
     
 }
