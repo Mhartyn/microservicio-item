@@ -159,10 +159,20 @@ public class Usuario implements Serializable {
     @Column(unique = true, length = 100)
     private String email;
 
+    private Integer intentos;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "usuarios_roles", joinColumns = @JoinColumn(name= "usuario_id"), inverseJoinColumns = @JoinColumn(name= "rol_id"), uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id", "rol_id"})})
     private List<Rol> roles;
 
     private static final long serialVersionUID = 3951508127137032588L;
+
+    public Integer getIntentos() {
+        return intentos;
+    }
+
+    public void setIntentos(Integer intentos) {
+        this.intentos = intentos;
+    }
     
 }

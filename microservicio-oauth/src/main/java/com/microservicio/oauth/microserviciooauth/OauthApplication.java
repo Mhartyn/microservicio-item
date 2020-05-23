@@ -24,6 +24,7 @@ public class OauthApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		String password = "12345";
 
+		System.out.println("contraseñas");
 		for (int i = 0; i < 4; i++) {
 			String passwordBCrypt = passwordEncoder.encode(password);
 

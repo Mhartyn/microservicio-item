@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
 
-@EntityScan({"com.microservicio.usuario.microserviciousuario.models.entity"})
+@EntityScan({"com.microservicio.common.usuario.microserviciocommonusuario.models.entity"})
 @Configuration
 public class RespositoryConfiguration implements RepositoryRestConfigurer {
     

@@ -17,30 +17,42 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-@Service
-public class UsuarioService implements UserDetailsService {
+import feign.FeignException;
 
-    private Logger log = LoggerFactory.getLogger(UsuarioService.class);
+@Service
+public class UsuarioService implements UserDetailsService, IUsuarioService {
+
+    private final Logger log = LoggerFactory.getLogger(UsuarioService.class);
 
     @Autowired
     private IUsuarioClient client;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = client.findByUsername(username);
-
-        if (usuario == null) {
+    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
+        try {
+            Usuario usuario = client.findByUsername(username);
+            final List<GrantedAuthority> authorities = usuario.getRoles()
+                    .stream()
+                                                        .map(rol -> new SimpleGrantedAuthority(rol.getNombre()))
+                                                        .peek(authority -> log.info("Rol: " + authority.getAuthority()))
+                                                        .collect(Collectors.toList());
+            log.info("Usuario autenticado: " + username);
+            return new User(usuario.getUsername(), usuario.getPassword(), usuario.getEnabled(), true, true, true, authorities);            
+        } catch (FeignException e) {
             String error = "Error en el login, no existe usuario " + username;
             log.error(error);
             throw new UsernameNotFoundException(error);
         }
+    }
 
-        List<GrantedAuthority> authorities = usuario.getRoles().stream()
-                                                    .map(rol -> new SimpleGrantedAuthority(rol.getNombre()))
-                                                    .peek(authority -> log.info("Rol: " + authority.getAuthority()))
-                                                    .collect(Collectors.toList());
-        log.info("Usuario autenticado: " + username);
-        return new User(usuario.getUsername(), usuario.getPassword(), usuario.getEnabled(), true, true, true, authorities);
+    @Override
+    public Usuario findByUsername(String username) {        
+        return client.findByUsername(username);
+    }
+
+    @Override
+    public Usuario update(Usuario usuario, Long id) {        
+        return client.update(usuario, id);
     }
     
 }
