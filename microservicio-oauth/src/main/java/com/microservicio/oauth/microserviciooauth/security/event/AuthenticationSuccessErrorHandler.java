@@ -12,6 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import brave.Tracer;
 import feign.FeignException;
 
 @Component
@@ -21,6 +22,9 @@ public class AuthenticationSuccessErrorHandler implements AuthenticationEventPub
 
     @Autowired
     private IUsuarioService usuarioService;
+
+    @Autowired
+    private Tracer tracer;
 
     @Override
     public void publishAuthenticationSuccess(Authentication authentication) {
@@ -43,6 +47,10 @@ public class AuthenticationSuccessErrorHandler implements AuthenticationEventPub
         log.info(mensaje);
 
         try {
+
+            StringBuilder errores = new StringBuilder();
+            errores.append(mensaje);
+
             Usuario usuario = usuarioService.findByUsername(authentication.getName());
             if (usuario.getIntentos()==null) {
                 usuario.setIntentos(0);
@@ -52,13 +60,19 @@ public class AuthenticationSuccessErrorHandler implements AuthenticationEventPub
             usuario.setIntentos(usuario.getIntentos() + 1);
             log.info("Intentos después es de: " + usuario.getIntentos());
 
+            errores.append(" - Intentos del login: " + usuario.getIntentos());
+            
             if (usuario.getIntentos() >= 3) {
-                log.error(String.format("el usuario %s des-habilitado por maximo de intentos", authentication.getName()));
-
+                String errorIntentos = String.format("el usuario %s des-habilitado por maximo de intentos", authentication.getName());
+                log.error(errorIntentos);
+                
                 usuario.setEnabled(false);
+                errores.append(" - " + errorIntentos);
             }
 
             usuarioService.update(usuario, usuario.getId());
+
+            tracer.currentSpan().tag("error.mensaje", errores.toString());
         } catch (FeignException e) {
             log.error(String.format("el usuario %s no existe en el sistema", authentication.getName()));
         }       
