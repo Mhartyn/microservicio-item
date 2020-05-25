@@ -34,9 +34,9 @@ services:
       - "RABBIT_URI=amqp://guest:guest@rabbitmq:5672"
       - "STORAGE_TYPE=mysql"
       - "MYSQL_HOST=mysql"
-      - "MYSQL_TCP_PORT=33060"
-      - "MYSQL_USER=zipkin"
-      - "MYSQL_PASS=zipkin"
+      - "MYSQL_TCP_PORT=3306"
+      - "MYSQL_USER=root"
+      - "MYSQL_PASS=2020"
     networks:
       - local
 
