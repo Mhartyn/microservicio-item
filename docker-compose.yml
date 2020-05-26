@@ -1,7 +1,7 @@
-version: "1"
+version: "3"
 services:
   rabbitmq:
-    image: rabbitmq:3.7.6-management
+    image: rabbitmq:3.8-management-alpine
     container_name: rabbitmq
     ports:
       - "5672:5672"
@@ -72,7 +72,7 @@ services:
       image: microservicio-usuario:v1
       container_name: microservicio-usuario
       ports: 
-        - "8002:8002"
+        - "8003:8003"
       networks:
         - microservicio
 
