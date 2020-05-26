@@ -1,4 +1,4 @@
-version: "3"
+version: "1"
 services:
   rabbitmq:
     image: rabbitmq:3.7.6-management
@@ -9,7 +9,7 @@ services:
     environment:
       - "TZ=@timezone@"
     networks:
-      - local
+      - microservicio
 
   mysql:
     image: mysql:latest
@@ -18,8 +18,20 @@ services:
       - "33060:3306"
     environment:
       - "MYSQL_ROOT_PASSWORD=2020"
+      - "MYSQL_DATABASE=productos"
     networks:
-      - local
+      - microservicio
+  
+  postgres:
+    image: postgres:12-alpine
+    container_name: postgres
+    ports:
+      - "54320:5432"
+    environment:
+      - "POSTGRES_PASSWORD=2020" 
+      - "POSTGRES_DB=usuarios"
+    networks:
+      - microservicio
 
   zipkin:
     image: openzipkin/zipkin:latest
@@ -38,7 +50,63 @@ services:
       - "MYSQL_USER=root"
       - "MYSQL_PASS=2020"
     networks:
-      - local
+      - microservicio
+
+  config-server:
+    image: config-server:v1
+    container_name: config-server
+    ports: 
+      - "8888:8888"
+    networks:
+      - microservicio
+  
+  eureka-server:
+      image: eureka-server:v1
+      container_name: eureka-server
+      ports: 
+        - "8761:8761"
+      networks:
+        - microservicio
+
+  microservicio-usuario:
+      image: microservicio-usuario:v1
+      container_name: microservicio-usuario
+      ports: 
+        - "8002:8002"
+      networks:
+        - microservicio
+
+  microservicio-oauth:
+      image: microservicio-oauth:v1
+      container_name: microservicio-oauth
+      ports: 
+        - "9100:9100"
+      networks:
+        - microservicio
+  
+  microservicio-producto:
+      image: microservicio-producto:v1
+      container_name: microservicio-producto
+      ports: 
+        - "8001:8001"
+      networks:
+        - microservicio
+
+  microservicio-item:
+      image: microservicio-item:v1
+      container_name: microservicio-item
+      ports: 
+        - "8002:8002"
+      networks:
+        - microservicio
+
+  zuul-server:
+      image: zuul-server:v1
+      container_name: zuul-server
+      ports: 
+        - "8090:8090"
+      networks:
+        - microservicio
 
 networks:
-  local:
+  microservicio:
