@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 services:
   rabbitmq:
     image: rabbitmq:3.8-management-alpine
@@ -8,6 +8,7 @@ services:
       - "15672:15672"
     environment:
       - "TZ=@timezone@"
+    restart: always
     networks:
       - microservicio
 
@@ -19,6 +20,7 @@ services:
     environment:
       - "MYSQL_ROOT_PASSWORD=2020"
       - "MYSQL_DATABASE=productos"
+    restart: always
     networks:
       - microservicio
   
@@ -30,6 +32,7 @@ services:
     environment:
       - "POSTGRES_PASSWORD=2020" 
       - "POSTGRES_DB=usuarios"
+    restart: always
     networks:
       - microservicio
 
@@ -47,8 +50,9 @@ services:
       - "STORAGE_TYPE=mysql"
       - "MYSQL_HOST=mysql"
       - "MYSQL_TCP_PORT=3306"
-      - "MYSQL_USER=root"
-      - "MYSQL_PASS=2020"
+      - "MYSQL_USER=zipkin"
+      - "MYSQL_PASS=zipkin"
+    restart: always
     networks:
       - microservicio
 
@@ -57,6 +61,7 @@ services:
     container_name: config-server
     ports: 
       - "8888:8888"
+    restart: always
     networks:
       - microservicio
   
@@ -65,14 +70,18 @@ services:
       container_name: eureka-server
       ports: 
         - "8761:8761"
+      restart: always
       networks:
         - microservicio
 
   microservicio-usuario:
       image: microservicio-usuario:v1
       container_name: microservicio-usuario
-      ports: 
-        - "8003:8003"
+      depends_on:
+      - config-server
+      - eureka-server
+      - postgres
+      restart: always
       networks:
         - microservicio
 
@@ -81,22 +90,33 @@ services:
       container_name: microservicio-oauth
       ports: 
         - "9100:9100"
+      depends_on:
+        - config-server
+        - eureka-server
+        - microservicio-usuario
+      restart: always
       networks:
         - microservicio
   
   microservicio-producto:
       image: microservicio-producto:v1
       container_name: microservicio-producto
-      ports: 
-        - "8001:8001"
+      depends_on:
+        - config-server
+        - eureka-server
+        - mysql
+      restart: always
       networks:
         - microservicio
 
   microservicio-item:
       image: microservicio-item:v1
       container_name: microservicio-item
-      ports: 
-        - "8002:8002"
+      depends_on:
+        - config-server
+        - eureka-server
+        - microservicio-producto     
+      restart: always
       networks:
         - microservicio
 
@@ -105,6 +125,14 @@ services:
       container_name: zuul-server
       ports: 
         - "8090:8090"
+      depends_on:
+        - config-server
+        - eureka-server
+        - microservicio-producto
+        - microservicio-item
+        - microservicio-usuario
+        - microservicio-oauth        
+      restart: always
       networks:
         - microservicio
 
