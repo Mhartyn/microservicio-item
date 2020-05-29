@@ -26,10 +26,10 @@ services:
       depends_on:
         - config-server
         - eureka-server
-        - microservicio-producto
-        - microservicio-item
-        - microservicio-usuario
-        - microservicio-oauth        
+        #- microservicio-producto
+        #- microservicio-item
+        #- microservicio-usuario
+        #- microservicio-oauth
       restart: always
       networks:
         - microservicio

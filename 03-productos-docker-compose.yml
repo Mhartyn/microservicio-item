@@ -3,10 +3,10 @@ services:
   microservicio-producto:
       image: ms-producto:v1
       container_name: microservicio-producto
-      depends_on:
-        - config-server
-        - eureka-server
-        - mysql
+      #depends_on:
+        #- config-server
+        #- eureka-server
+        #- mysql
       restart: always
       networks:
         - microservicio
@@ -15,8 +15,8 @@ services:
       image: ms-item:v1
       container_name: microservicio-item
       depends_on:
-        - config-server
-        - eureka-server
+        #- config-server
+        #- eureka-server
         - microservicio-producto     
       restart: always
       networks:

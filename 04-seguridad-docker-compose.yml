@@ -5,9 +5,9 @@ services:
       image: ms-usuario:v1
       container_name: microservicio-usuario
       depends_on:
-      - config-server
-      - eureka-server
-      - postgres
+      #- config-server
+      #- eureka-server
+      #- postgres
       restart: always
       networks:
         - microservicio
@@ -18,8 +18,8 @@ services:
       ports: 
         - "9100:9100"
       depends_on:
-        - config-server
-        - eureka-server
+        #- config-server
+        #- eureka-server
         - microservicio-usuario
       restart: always
       networks:
