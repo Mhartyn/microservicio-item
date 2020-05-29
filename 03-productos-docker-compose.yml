@@ -1,0 +1,26 @@
+version: "3.7"
+services:  
+  microservicio-producto:
+      image: ms-producto:v1
+      container_name: microservicio-producto
+      depends_on:
+        - config-server
+        - eureka-server
+        - mysql
+      restart: always
+      networks:
+        - microservicio
+
+  microservicio-item:
+      image: ms-item:v1
+      container_name: microservicio-item
+      depends_on:
+        - config-server
+        - eureka-server
+        - microservicio-producto     
+      restart: always
+      networks:
+        - microservicio
+
+networks:
+  microservicio:

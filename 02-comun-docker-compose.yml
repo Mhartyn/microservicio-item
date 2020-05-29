@@ -1,0 +1,38 @@
+version: "3.7"
+services:  
+  config-server:
+    image: ms-config-server:v1
+    container_name: config-server
+    ports: 
+      - "8888:8888"
+    restart: always
+    networks:
+      - microservicio
+  
+  eureka-server:
+      image: ms-eureka-server:v1
+      container_name: eureka-server
+      ports: 
+        - "8761:8761"
+      restart: always
+      networks:
+        - microservicio
+
+  zuul-server:
+      image: ms-zuul-server:v1
+      container_name: zuul-server
+      ports: 
+        - "8090:8090"
+      depends_on:
+        - config-server
+        - eureka-server
+        - microservicio-producto
+        - microservicio-item
+        - microservicio-usuario
+        - microservicio-oauth        
+      restart: always
+      networks:
+        - microservicio
+
+networks:
+  microservicio:

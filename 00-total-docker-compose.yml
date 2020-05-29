@@ -1,5 +1,59 @@
 version: "3.7"
-services:
+services:  
+  config-server:
+    image: ms-config-server:v1
+    container_name: config-server
+    ports: 
+      - "8888:8888"
+    restart: always
+    networks:
+      - microservicio
+  
+  eureka-server:
+      image: ms-eureka-server:v1
+      container_name: eureka-server
+      ports: 
+        - "8761:8761"
+      restart: always
+      networks:
+        - microservicio
+
+  postgres:
+    image: postgres:12-alpine
+    container_name: postgres
+    ports:
+      - "54320:5432"
+    environment:
+      - "POSTGRES_PASSWORD=2020" 
+      - "POSTGRES_DB=usuarios"
+    restart: always
+    networks:
+      - microservicio
+
+  microservicio-usuario:
+      image: ms-usuario:v1
+      container_name: microservicio-usuario
+      depends_on:
+      - config-server
+      - eureka-server
+      - postgres
+      restart: always
+      networks:
+        - microservicio
+
+  microservicio-oauth:
+      image: ms-oauth:v1
+      container_name: microservicio-oauth
+      ports: 
+        - "9100:9100"
+      depends_on:
+        - config-server
+        - eureka-server
+        - microservicio-usuario
+      restart: always
+      networks:
+        - microservicio
+  
   rabbitmq:
     image: rabbitmq:3.8-management-alpine
     container_name: rabbitmq
@@ -23,19 +77,7 @@ services:
     restart: always
     networks:
       - microservicio
-  
-  postgres:
-    image: postgres:12-alpine
-    container_name: postgres
-    ports:
-      - "54320:5432"
-    environment:
-      - "POSTGRES_PASSWORD=2020" 
-      - "POSTGRES_DB=usuarios"
-    restart: always
-    networks:
-      - microservicio
-
+    
   zipkin:
     image: openzipkin/zipkin:latest
     container_name: zipkin
@@ -56,50 +98,8 @@ services:
     networks:
       - microservicio
 
-  config-server:
-    image: config-server:v1
-    container_name: config-server
-    ports: 
-      - "8888:8888"
-    restart: always
-    networks:
-      - microservicio
-  
-  eureka-server:
-      image: eureka-server:v1
-      container_name: eureka-server
-      ports: 
-        - "8761:8761"
-      restart: always
-      networks:
-        - microservicio
-
-  microservicio-usuario:
-      image: microservicio-usuario:v1
-      container_name: microservicio-usuario
-      depends_on:
-      - config-server
-      - eureka-server
-      - postgres
-      restart: always
-      networks:
-        - microservicio
-
-  microservicio-oauth:
-      image: microservicio-oauth:v1
-      container_name: microservicio-oauth
-      ports: 
-        - "9100:9100"
-      depends_on:
-        - config-server
-        - eureka-server
-        - microservicio-usuario
-      restart: always
-      networks:
-        - microservicio
-  
   microservicio-producto:
-      image: microservicio-producto:v1
+      image: ms-producto:v1
       container_name: microservicio-producto
       depends_on:
         - config-server
@@ -110,7 +110,7 @@ services:
         - microservicio
 
   microservicio-item:
-      image: microservicio-item:v1
+      image: ms-item:v1
       container_name: microservicio-item
       depends_on:
         - config-server
@@ -121,7 +121,7 @@ services:
         - microservicio
 
   zuul-server:
-      image: zuul-server:v1
+      image: ms-zuul-server:v1
       container_name: zuul-server
       ports: 
         - "8090:8090"

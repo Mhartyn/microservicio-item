@@ -1,0 +1,29 @@
+version: "3.7"
+services:  
+
+  microservicio-usuario:
+      image: ms-usuario:v1
+      container_name: microservicio-usuario
+      depends_on:
+      - config-server
+      - eureka-server
+      - postgres
+      restart: always
+      networks:
+        - microservicio
+
+  microservicio-oauth:
+      image: ms-oauth:v1
+      container_name: microservicio-oauth
+      ports: 
+        - "9100:9100"
+      depends_on:
+        - config-server
+        - eureka-server
+        - microservicio-usuario
+      restart: always
+      networks:
+        - microservicio
+
+networks:
+  microservicio:
