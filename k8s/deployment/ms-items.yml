@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservicio-items
+  labels:
+    app: microservicio-items
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservicio-items
+  template:
+    metadata:
+      labels:
+        app: microservicio-items
+    spec:
+      containers:
+      - name: microservicio-items
+        image: ms-item:v1
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "100m"        
