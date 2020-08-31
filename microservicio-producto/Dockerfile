@@ -1,8 +1,8 @@
-FROM common:latest AS MAVEN_TOOL_CHAIN
+FROM mhartyn/ms-common:latest AS MAVEN_TOOL_CHAIN
 
-COPY pom.xml /tmp/
+COPY ./pom.xml /tmp/
 
-COPY src /tmp/src/
+COPY ./src /tmp/src/
 WORKDIR /tmp/
 
 RUN mvn clean package -DskipTests
