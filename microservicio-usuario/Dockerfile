@@ -12,7 +12,7 @@ ENTRYPOINT [ "java", "-jar", "/microservicio-usuario.jar" ]
 #./mvnw clean package
 
 #FROM openjdk:8
-#docker build -t microservicio-usuario:v1 .
+#docker build -f ./microservicio-usuario/Dockerfile  -t microservicio-usuario:v1 .
 
 #docker network create microservicio
 #docker run -P --network microservicio microservicio-usuario:v1 
