@@ -7,7 +7,7 @@ RUN mvn clean package -DskipTests
 FROM openjdk:12
 VOLUME /tmp
 EXPOSE 8090
-COPY --from=MAVEN_TOOL_CHAIN ./target/*.jar zuul-server.jar
+COPY --from=MAVEN_TOOL_CHAIN /tmp/target/*.jar zuul-server.jar
 ENTRYPOINT [ "java", "-jar", "/zuul-server.jar" ]
 
 #./mvnw clean package -DskipTests

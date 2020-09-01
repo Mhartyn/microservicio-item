@@ -6,7 +6,7 @@ RUN mvn clean package -DskipTests
 
 FROM openjdk:12
 VOLUME /tmp
-COPY --from=MAVEN_TOOL_CHAIN ./target/*.jar microservicio-item.jar
+COPY --from=MAVEN_TOOL_CHAIN /tmp/target/*.jar microservicio-item.jar
 ENTRYPOINT [ "java", "-jar", "/microservicio-item.jar" ]
 
 #./mvnw clean package

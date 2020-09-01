@@ -7,7 +7,7 @@ RUN mvn clean package -DskipTests
 FROM openjdk:12
 VOLUME /tmp
 EXPOSE 8761
-COPY --from=MAVEN_TOOL_CHAIN ./target/*.jar eureka-server.jar
+COPY --from=MAVEN_TOOL_CHAIN /tmp/target/*.jar eureka-server.jar
 ENTRYPOINT [ "java", "-jar", "/eureka-server.jar" ]
 
 #./mvnw clean package

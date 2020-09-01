@@ -7,7 +7,7 @@ RUN mvn clean package -DskipTests
 FROM openjdk:8 
 VOLUME /tmp
 EXPOSE 8888
-COPY --from=MAVEN_TOOL_CHAIN ./target/*.jar config-server.jar
+COPY --from=MAVEN_TOOL_CHAIN /tmp/target/*.jar config-server.jar
 ENTRYPOINT [ "java", "-jar", "/config-server.jar" ]
 
 #FROM openjdk:12
