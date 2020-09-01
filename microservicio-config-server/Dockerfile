@@ -1,4 +1,4 @@
-FROM maven:3.6.3-openjdk-16:latest AS MAVEN_TOOL_CHAIN
+FROM maven:3.6.3-openjdk-16 AS MAVEN_TOOL_CHAIN
 COPY ./microservicio-config-server/pom.xml /tmp/
 COPY ./microservicio-config-server/src /tmp/src/
 WORKDIR /tmp/

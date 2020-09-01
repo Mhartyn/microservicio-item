@@ -1,4 +1,4 @@
-FROM maven:3.6.3-openjdk-16:latest AS MAVEN_TOOL_CHAIN
+FROM maven:3.6.3-openjdk-16 AS MAVEN_TOOL_CHAIN
 COPY ./microservicio-zuul-server/pom.xml /tmp/
 COPY ./microservicio-zuul-server/src /tmp/src/
 WORKDIR /tmp/
