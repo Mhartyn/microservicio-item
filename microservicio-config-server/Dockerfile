@@ -1,7 +1,13 @@
+FROM maven:3.6.3-openjdk-16:latest AS MAVEN_TOOL_CHAIN
+COPY ./microservicio-config-server/pom.xml /tmp/
+COPY ./microservicio-config-server/src /tmp/src/
+WORKDIR /tmp/
+RUN mvn clean package -DskipTests
+
 FROM openjdk:8 
 VOLUME /tmp
 EXPOSE 8888
-ADD ./target/microservicio-config-server-0.0.1-SNAPSHOT.jar config-server.jar
+COPY --from=MAVEN_TOOL_CHAIN ./target/*.jar config-server.jar
 ENTRYPOINT [ "java", "-jar", "/config-server.jar" ]
 
 #FROM openjdk:12

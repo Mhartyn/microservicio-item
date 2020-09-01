@@ -1,7 +1,13 @@
+FROM maven:3.6.3-openjdk-16:latest AS MAVEN_TOOL_CHAIN
+COPY ./microservicio-zuul-server/pom.xml /tmp/
+COPY ./microservicio-zuul-server/src /tmp/src/
+WORKDIR /tmp/
+RUN mvn clean package -DskipTests
+
 FROM openjdk:12
 VOLUME /tmp
 EXPOSE 8090
-ADD ./target/microservicio-zuul-server-0.0.1-SNAPSHOT.jar zuul-server.jar
+COPY --from=MAVEN_TOOL_CHAIN ./target/*.jar zuul-server.jar
 ENTRYPOINT [ "java", "-jar", "/zuul-server.jar" ]
 
 #./mvnw clean package -DskipTests

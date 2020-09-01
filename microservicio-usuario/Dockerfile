@@ -1,6 +1,12 @@
+FROM mhartyn/ms-common-usuario:latest AS MAVEN_TOOL_CHAIN
+COPY ./microservicio-usuario/pom.xml /tmp/
+COPY ./microservicio-usuario/src /tmp/src/
+WORKDIR /tmp/
+RUN mvn clean package -DskipTests
+
 FROM openjdk:12
 VOLUME /tmp
-ADD ./target/microservicio-usuario-0.0.1-SNAPSHOT.jar microservicio-usuario.jar
+COPY --from=MAVEN_TOOL_CHAIN ./target/*.jar microservicio-usuario.jar
 ENTRYPOINT [ "java", "-jar", "/microservicio-usuario.jar" ]
 
 #./mvnw clean package

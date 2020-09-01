@@ -1,7 +1,13 @@
+FROM maven:3.6.3-openjdk-16:latest AS MAVEN_TOOL_CHAIN
+COPY ./microservicio-config-server/pom.xml /tmp/
+COPY ./microservicio-config-server/src /tmp/src/
+WORKDIR /tmp/
+RUN mvn clean package -DskipTests
+
 FROM openjdk:12
 VOLUME /tmp
 EXPOSE 8761
-ADD ./target/microservicio-eureka-server-0.0.1-SNAPSHOT.jar eureka-server.jar
+COPY --from=MAVEN_TOOL_CHAIN ./target/*.jar eureka-server.jar
 ENTRYPOINT [ "java", "-jar", "/eureka-server.jar" ]
 
 #./mvnw clean package

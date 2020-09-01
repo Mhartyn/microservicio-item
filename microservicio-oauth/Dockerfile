@@ -1,7 +1,13 @@
+FROM mhartyn/ms-common-usuario:latest AS MAVEN_TOOL_CHAIN
+COPY ./microservicio-oauth/pom.xml /tmp/
+COPY ./microservicio-oauth/src /tmp/src/
+WORKDIR /tmp/
+RUN mvn clean package -DskipTests
+
 FROM openjdk:12
 VOLUME /tmp
 EXPOSE 9100
-ADD ./target/microservicio-oauth-0.0.1-SNAPSHOT.jar microservicio-oauth.jar
+COPY --from=MAVEN_TOOL_CHAIN ./target/*.jar microservicio-oauth.jar
 ENTRYPOINT [ "java", "-jar", "/microservicio-oauth.jar" ]
 
 #./mvnw clean package -DskipTests
