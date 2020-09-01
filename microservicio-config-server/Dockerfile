@@ -4,7 +4,7 @@ COPY ./microservicio-config-server/src /tmp/src/
 WORKDIR /tmp/
 RUN mvn clean package -DskipTests
 
-FROM openjdk:8 
+FROM openjdk:12
 VOLUME /tmp
 EXPOSE 8888
 COPY --from=MAVEN_TOOL_CHAIN /tmp/target/*.jar config-server.jar
