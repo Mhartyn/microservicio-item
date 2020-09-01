@@ -1,6 +1,6 @@
 FROM maven:3.6.3-openjdk-16:latest AS MAVEN_TOOL_CHAIN
-COPY ./microservicio-config-server/pom.xml /tmp/
-COPY ./microservicio-config-server/src /tmp/src/
+COPY ./microservicio-eureka-server/pom.xml /tmp/
+COPY ./microservicio-eureka-server/src /tmp/src/
 WORKDIR /tmp/
 RUN mvn clean package -DskipTests
 
